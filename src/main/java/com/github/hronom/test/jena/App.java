@@ -42,13 +42,14 @@ public class App {
         ExtendedIterator<Triple> iter = graph.find(
             Node.ANY,
             NodeFactory.createURI("creationYear"),
-            Node.ANY
+            NodeFactory.createURI("2015")
         );
 
         while (iter.hasNext()) {
             Triple triple = iter.next();
             Node subject = triple.getSubject();
 
+            // Exception here.
             graph.add(
                 new Triple(
                     subject, NodeFactory.createURI("status"), NodeFactory.createURI("available")
