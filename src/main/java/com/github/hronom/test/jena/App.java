@@ -17,16 +17,16 @@ public class App {
         graph.add(
             new Triple(
                 NodeFactory.createURI("www.test.org/unit13"),
-                NodeFactory.createURI("type"),
-                NodeFactory.createURI("robot")
+                NodeFactory.createURI("name"),
+                NodeFactory.createLiteral("Unit 13", "en")
             )
         );
 
         graph.add(
             new Triple(
-                NodeFactory.createURI("www.test.org"),
-                NodeFactory.createURI("isCombat"),
-                NodeFactory.createLiteral("true")
+                NodeFactory.createURI("www.test.org/unit13"),
+                NodeFactory.createURI("type"),
+                NodeFactory.createURI("robot")
             )
         );
 
