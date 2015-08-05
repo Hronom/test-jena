@@ -32,7 +32,7 @@ public class App {
 
         graph.add(
             new Triple(
-                NodeFactory.createURI("www.test.org"),
+                NodeFactory.createURI("www.test.org/unit13"),
                 NodeFactory.createURI("creationYear"),
                 NodeFactory.createURI("2015")
             )
