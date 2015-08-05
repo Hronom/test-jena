@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Hronom/test-jena.svg)](https://travis-ci.org/Hronom/test-jena)
+
 # test-jena
 
 Testing [Apache Jena](https://jena.apache.org) functionality.
