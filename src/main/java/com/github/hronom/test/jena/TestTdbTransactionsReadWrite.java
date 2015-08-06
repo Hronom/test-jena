@@ -9,11 +9,9 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.DatasetGraph;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.update.UpdateAction;
-import com.hp.hpl.jena.update.UpdateFactory;
-import com.hp.hpl.jena.update.UpdateRequest;
 
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
@@ -51,17 +49,25 @@ public class TestTdbTransactionsReadWrite {
         );
 
         // Test.
-        String qs1 = "SELECT * { ?s <http://example/creationYear> <http://example/2015> }";
+        String qs1 = "SELECT * { ?s <http://example/name> ?o }";
         try (QueryExecution qExec = QueryExecutionFactory.create(qs1, dataset)) {
             ResultSet rs = qExec.execSelect();
-            //ResultSetFormatter.out(rs);
 
             while (rs.hasNext()) {
                 QuerySolution qs = rs.next();
-                UpdateRequest request = UpdateFactory.create(
-                    "INSERT { <" + qs.get("s") + "> <http://example/value> '1' } WHERE { <" + qs.get("s") + "> <http://example/creationYear> <http://example/2015> }"
-                );
-                UpdateAction.execute(request, dataset);
+                RDFNode nodeSubject = qs.get("s");
+                RDFNode nodeObject = qs.get("o");
+                if (nodeSubject.isURIResource() && nodeObject.isLiteral()) {
+                    String str = nodeObject.asLiteral().getString();
+
+                    graph.add(
+                        new Triple(
+                            NodeFactory.createURI(nodeSubject.asResource().getURI()),
+                            NodeFactory.createURI("http://example/value"),
+                            NodeFactory.createLiteral(String.valueOf(str.length()))
+                        )
+                    );
+                }
             }
 
             dataset.commit();
