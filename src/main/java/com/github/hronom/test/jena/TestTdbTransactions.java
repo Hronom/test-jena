@@ -1,15 +1,16 @@
 package com.github.hronom.test.jena;
 
 import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.sparql.core.DatasetGraph;
-import com.hp.hpl.jena.sparql.core.Quad;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.transaction.DatasetGraphTransaction;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateFactory;
 import com.hp.hpl.jena.update.UpdateRequest;
@@ -17,11 +18,10 @@ import com.hp.hpl.jena.update.UpdateRequest;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 
-import java.util.Iterator;
-
-public class App {
+public class TestTdbTransactions {
     public static void main(String[] args) {
         Dataset dataset = TDBFactory.createDataset();
+        dataset.begin(ReadWrite.WRITE);
         DatasetGraph datasetGraph = dataset.asDatasetGraph();
         Graph graph = datasetGraph.getDefaultGraph();
 
@@ -50,31 +50,15 @@ public class App {
             )
         );
 
-        //find(datasetGraph);
+        // Test.
+        UpdateRequest request = UpdateFactory.create(
+            "INSERT { ?s <http://example/value> '1' } WHERE { ?s <http://example/creationYear> <http://example/2015> . }"
+        );
+        UpdateAction.execute(request, dataset);
+
+        dataset.commit();
+        dataset.end();
 
         RDFDataMgr.write(System.out, graph, RDFFormat.NTRIPLES);
-    }
-
-    private static void find(DatasetGraph datasetGraph) {
-        // Test
-        Iterator<Quad> iter = datasetGraph
-            .find(Node.ANY, Node.ANY, NodeFactory.createURI("http://example/name"), Node.ANY);
-
-        DatasetGraphTransaction dgt = (DatasetGraphTransaction) datasetGraph;
-        dgt.begin(ReadWrite.WRITE);
-        while (iter.hasNext()) {
-            Quad quad = iter.next();
-            Node graph = quad.getGraph();
-            Node subject = quad.getSubject();
-
-            // Exception here.
-            datasetGraph.add(
-                new Quad(
-                    graph, subject, NodeFactory.createURI("http://example/value"), NodeFactory.createLiteral("1")
-                )
-            );
-        }
-        dgt.commit();
-        dgt.end();
     }
 }
