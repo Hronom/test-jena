@@ -12,9 +12,6 @@ import org.apache.jena.riot.RDFFormat;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * Created by Hronom on 19.08.2015.
- */
 public class TestReopenTdb {
     public static final Path pathToTdb = Paths.get("test_tdb");
 
