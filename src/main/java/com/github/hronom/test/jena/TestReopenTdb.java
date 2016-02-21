@@ -1,13 +1,12 @@
 package com.github.hronom.test.jena;
 
-import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.NodeFactory;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.sparql.core.DatasetGraph;
-import com.hp.hpl.jena.tdb.TDBFactory;
-
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.tdb.TDBFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
