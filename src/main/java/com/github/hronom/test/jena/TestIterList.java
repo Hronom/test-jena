@@ -9,6 +9,7 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.tdb.TDBFactory;
+import org.apache.jena.util.IteratorCollection;
 
 import java.util.Iterator;
 
@@ -35,10 +36,10 @@ public class TestIterList {
         ));
 
         // Test
-        Iterator<Triple> iter = graph.find(Node.ANY,
+        Iterator<Triple> iter = IteratorCollection.iteratorToList(graph.find(Node.ANY,
             NodeFactory.createURI("http://example/creationYear"),
             NodeFactory.createURI("http://example/2015")
-        ).toList().iterator();
+        )).iterator();
 
         while (iter.hasNext()) {
             Triple triple = iter.next();
