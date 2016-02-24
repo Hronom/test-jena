@@ -18,7 +18,6 @@ import org.apache.jena.tdb.TDBFactory;
 public class TestTdbTransactionsReadWrite {
     public static void main(String[] args) {
         Dataset dataset = TDBFactory.createDataset();
-        dataset.begin(ReadWrite.WRITE);
         DatasetGraph datasetGraph = dataset.asDatasetGraph();
         Graph graph = datasetGraph.getDefaultGraph();
 
@@ -47,6 +46,7 @@ public class TestTdbTransactionsReadWrite {
             )
         );
 
+        dataset.begin(ReadWrite.WRITE);
         // Test.
         String qs1 = "SELECT * { ?s <http://example/name> ?o }";
         try (QueryExecution qExec = QueryExecutionFactory.create(qs1, dataset)) {
